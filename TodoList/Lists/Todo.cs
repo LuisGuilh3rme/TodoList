@@ -41,5 +41,27 @@ namespace TodoList.Lists
         {
             return "";
         }
+
+        public void setDueDate(string date)
+        {
+            DueDate = DateTime.Parse(date);
+        }
+
+        public void setDescription(string description)
+        {
+            Description = description;
+        }
+
+        public void setStatus() => Status = true ? false : true;
+
+        public void setCategory(string category)
+        {
+            Category = category;
+        }
+
+        public void setPerson(Person person)
+        {
+            Owner = person;
+        }
     }
 }

@@ -18,8 +18,7 @@ internal class Program
             Console.WriteLine("== TO DO LIST MENU ==");
             Console.WriteLine("1 - Criar tarefa");
             Console.WriteLine("2 - Visualizar tarefas");
-            Console.WriteLine("3 - Remover tarefas");
-            Console.WriteLine("4 - Editar tarefas");
+            Console.WriteLine("3 - Editar tarefas");
             Console.WriteLine("0 - Sair");
             Console.Write("\nDigite a opção desejada: ");
             bool valid = int.TryParse(Console.ReadLine(), out escolha);
@@ -45,9 +44,6 @@ internal class Program
                 Console.ReadLine();
                 break;
             case 3:
-                // chamar metodo para remover tarefas
-                break;
-            case 4:
                 // chamar metodo para editar tarefas
                 EditTask();
                 break;

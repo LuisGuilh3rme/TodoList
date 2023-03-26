@@ -2,7 +2,7 @@
 using TodoList.Lists;
 internal class Program
 {
-    public static List<Person> people = new List<Person>();
+    public static List<Person> personList = new List<Person>();
     public static List<string> categories = new List<string>();
     public static List<Todo> todos = new List<Todo>();
     private static void Main(string[] args)
@@ -69,8 +69,17 @@ internal class Program
         string description = Console.ReadLine();
         Console.Write("Dono da tarefa: ");
         string ownerName = Console.ReadLine();
-        Person owner = new Person(ownerName);
-        todos.Add(new Todo(description, owner));
+        Person person;
+        if (personList.Exists(person => person.Name == ownerName))
+        {
+            person = personList.Find(person => person.Name == ownerName);
+        }
+        else
+        {
+            person = new Person(ownerName);
+            personList.Add(person);
+        }
+        todos.Add(new Todo(description, person));
         return true;
     }
     private static bool EditTask()

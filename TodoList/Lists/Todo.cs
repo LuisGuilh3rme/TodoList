@@ -7,6 +7,7 @@
         public DateTime Created { get; private set; }
         public DateTime DueDate { get; private set; }
         public bool Status { get; private set; }
+        public string MostrarStatus { get; private set; }
         public string Category { get; private set; }
         public Person Owner { get; private set; }
         public Todo(string description, Person person, string? created = null)
@@ -22,6 +23,7 @@
 
             // Status da tarefa começa como ativo
             Status = true;
+            setPrintStatus();
 
             // Categoria começa como nenhuma
             Category = "Nenhuma";
@@ -33,7 +35,7 @@
         // String para visualização do usuário
         public override string ToString()
         {
-            return $"{Description.PadRight(30)} | {Category.PadRight(15)} | {DueDate} | {Status.ToString().PadRight(7)} | {Owner.Name}";
+            return $"{Description.PadRight(30)} | {Category.PadRight(15)} | {DueDate} | {MostrarStatus.PadRight(7)} | {Owner.Name}";
         }
 
         // String para armazenar no backup
@@ -46,10 +48,23 @@
 
         public void setDescription(string description) { Description = description; }
 
-        public void setCategory(string category) { Category = category;  }
+        public void setCategory(string category) { Category = category; }
         public void setPerson(Person person) { Owner = person; }
 
         public void loadId(string id) { _id = id; }
-        public void setStatus() => Status = true ? false : true;
+
+        public void setPrintStatus()
+        {
+            if (Status == true) MostrarStatus = "Ativo";
+            else MostrarStatus = "Inativo";
+        }
+
+        public void setStatus()
+        {
+            if (Status == true) Status = false;
+            else Status = true;
+
+            setPrintStatus();
+        }
     }
 }

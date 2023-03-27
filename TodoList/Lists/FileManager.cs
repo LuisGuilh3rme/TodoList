@@ -77,7 +77,7 @@
                 todo.loadId(id);
                 todo.setDueDate(DateTime.Parse(duedate));
                 todo.setCategory(category);
-                if (status == "false") todo.setStatus();
+                if (status == "False") todo.setStatus();
                 todos.Add(todo);
             }
 

@@ -1,4 +1,6 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Runtime.Intrinsics.X86;
+using System.Xml.Serialization;
 using TodoList.Lists;
 internal class Program
 {
@@ -54,23 +56,17 @@ internal class Program
                     Console.WriteLine("\n\nEscolha uma opção: ");
                     option = int.Parse(Console.ReadLine());
                 } while ((option != 1) && (option != 2));
-                if (option == 1)
+
+                if (todos.Count == 0)
                 {
-                    if (!PrintList())
-                    {
-                        PrintError("Lista vazia!");
-                        break;
-                    }
-                }
-                else
-                {
-                    if (!PrintCategoryList())
-                    {
-                        PrintError("Lista vazia!");
-                        break;
-                    }
+                    PrintError("Lista vazia!");
+                    break;
                 }
 
+                if (option == 1) PrintList();
+                else PrintCategoryList();
+
+                Console.WriteLine("Digite ENTER para continuar");
                 Console.ReadLine();
                 break;
             case 3:
@@ -198,9 +194,14 @@ internal class Program
 
         Console.WriteLine("      DESCRIÇÃO TAREFA".PadRight(37)  + "| CATEGORIA ".PadRight(18) + "| DATA DE FINALIZAÇÃO " + "| STATUS  ".PadRight(9) + "| DONO DA TAREFA");
         int count = 0;
+
+        ConsoleColor aux = Console.ForegroundColor;
+
         foreach (Todo todo in todos)
         {
+            if (todo.DueDate < DateTime.Now) Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("{0:D4}) {1} ", ++count, todo.ToString());
+            Console.ForegroundColor = aux;
         }
         Console.WriteLine();
 
@@ -220,20 +221,23 @@ internal class Program
             }
 
         }
+
+        ConsoleColor aux = Console.ForegroundColor;
+
         foreach (string category in categories)
         {
-            Console.WriteLine("Categoria: " + category);
+            Console.WriteLine("      DESCRIÇÃO TAREFA".PadRight(37) + "| CATEGORIA ".PadRight(18) + "| DATA DE FINALIZAÇÃO " + "| STATUS  ".PadRight(9) + "| DONO DA TAREFA");
             List<Todo> todoFilter = todos.FindAll(todo => todo.Category == category);
             int count = 0;
             foreach (Todo todo in todoFilter)
             {
+                if (todo.DueDate < DateTime.Now) Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("{0:D4}) {1} ", ++count, todo.ToString());
+                Console.ForegroundColor = aux;
             }
             Console.WriteLine();
         }
-        Console.ReadLine();
         return true;
-
     }
 
     private static void WriteFiles()

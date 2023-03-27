@@ -54,7 +54,7 @@ internal class Program
                     Console.WriteLine("\n\nEscolha uma opção: ");
                     option = int.Parse(Console.ReadLine());
                 } while ((option != 1) && (option != 2));
-                if(option == 1)
+                if (option == 1)
                 {
                     if (!PrintList())
                     {
@@ -196,7 +196,7 @@ internal class Program
     {
         if (todos.Count == 0) return false;
 
-        Console.WriteLine("      DESCRIÇÃO TAREFA | CATEGORIA | DATA DE FINALIZAÇÃO | STATUS ATUAL | DONO DA TAREFA");
+        Console.WriteLine("      DESCRIÇÃO TAREFA".PadRight(37)  + "| CATEGORIA ".PadRight(18) + "| DATA DE FINALIZAÇÃO " + "| STATUS  ".PadRight(9) + "| DONO DA TAREFA");
         int count = 0;
         foreach (Todo todo in todos)
         {
@@ -211,16 +211,16 @@ internal class Program
     {
         List<string> categories = new List<string>();
         if (todos.Count == 0) return false;
-        foreach(Todo todo in todos)
+        foreach (Todo todo in todos)
         {
-            
+
             if (!categories.Exists(category => todo.Category == category))
             {
                 categories.Add(todo.Category);
             }
 
         }
-        foreach(string category in categories)
+        foreach (string category in categories)
         {
             Console.WriteLine("Categoria: " + category);
             List<Todo> todoFilter = todos.FindAll(todo => todo.Category == category);

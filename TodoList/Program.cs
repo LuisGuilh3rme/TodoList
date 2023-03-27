@@ -53,9 +53,11 @@ internal class Program
                     Console.Clear();
                     Console.WriteLine("1 - Visualizar todas as tarefas");
                     Console.WriteLine("2 - Visualizar por categorias");
-                    Console.WriteLine("\n\nEscolha uma opção: ");
+                    Console.WriteLine("\nEscolha uma opção: ");
                     option = int.Parse(Console.ReadLine());
                 } while ((option != 1) && (option != 2));
+
+                Console.Clear();
 
                 if (todos.Count == 0)
                 {
@@ -108,7 +110,7 @@ internal class Program
     private static bool EditTask()
     {
         Console.Clear();
-        Console.WriteLine("== EDIT LIST ==");
+        Console.WriteLine();
 
         if (!PrintList())
         {
@@ -131,6 +133,7 @@ internal class Program
         do
         {
             Console.Clear();
+            Console.WriteLine("DESCRIÇÃO TAREFA".PadRight(31) + "| CATEGORIA ".PadRight(18) + "| DATA DE FINALIZAÇÃO " + "| STATUS  ".PadRight(9) + "| DONO DA TAREFA");
             Console.WriteLine(todos[index].ToString());
             Console.WriteLine();
             Console.WriteLine("O que deseja editar?");
@@ -142,7 +145,6 @@ internal class Program
             Console.WriteLine("0 - Sair do menu");
 
             int.TryParse(Console.ReadLine(), out editOption);
-            if (editOption > 5 || editOption < 1) editOption = 0;
 
             switch (editOption)
             {
@@ -165,11 +167,13 @@ internal class Program
                     string description = Console.ReadLine();
                     todos[index].setDescription(description);
                     break;
+
                 case 3:
                     Console.WriteLine("Insira a nova categoria: ");
                     string category = Console.ReadLine();
                     todos[index].setCategory(category);
                     break;
+
                 case 4:
                     Console.WriteLine("Insira a data de finalização (dd/mm/yyyy): ");
                     if (!DateOnly.TryParse(Console.ReadLine(), out DateOnly date))
@@ -181,7 +185,7 @@ internal class Program
                     Console.WriteLine("Insira o horário de finalização (horas:minutos)");
                     if (!TimeOnly.TryParse(Console.ReadLine(), out TimeOnly time))
                     {
-                        Console.WriteLine("Data inválida");
+                        Console.WriteLine("Horário inválido");
                         break;
                     }
 
@@ -193,10 +197,8 @@ internal class Program
                     todos[index].setStatus();
                     break;
             }
-        } while (editOption == 0);
+        } while (editOption != 0);
 
-        Console.WriteLine("Sucesso na edição! Digite ENTER para continuar");
-        Console.ReadLine();
         return true;
     }
     private static bool PrintList()

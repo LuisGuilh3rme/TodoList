@@ -1,4 +1,6 @@
-﻿namespace TodoList.Lists
+﻿using System.Runtime.Intrinsics.X86;
+
+namespace TodoList.Lists
 {
     internal class FileManager
     {
@@ -47,6 +49,40 @@
                 Console.WriteLine("Erro: " + ex.Message);
             }
             _sw.Close();
+        }
+
+        // Escreve um arquivo bonitinho para visualização do usuário
+        public void WriteUserFile(List<Todo> todos)
+        {
+            _backupPath = Path + @"\\Documents\\TodoList.txt";
+
+            List<string> categories = new List<string>();
+            foreach (Todo todo in todos)
+            {
+                if (!categories.Exists(category => todo.Category == category))
+                {
+                    categories.Add(todo.Category);
+                }
+            }
+
+            _sw = new StreamWriter(_backupPath);
+            _sw.Close();
+
+            foreach (string category in categories)
+            {
+                _sw = File.AppendText(_backupPath);
+
+                _sw.WriteLine();
+                _sw.WriteLine("**CATEGORIA: {0}**", category);
+                _sw.Close();
+
+                List<Todo> todoFilter = todos.FindAll(todo => todo.Category == category);
+                foreach (Todo todo in todoFilter)
+                {
+                    WriteItem(todo.ToString());
+                }
+
+            }
         }
 
         public List<Todo> LoadTodoFile(List<Person> persons)

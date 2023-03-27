@@ -13,6 +13,7 @@ internal class Program
         LoadFiles();
 
         Menu();
+
     }
     static void Menu()
     {
@@ -257,6 +258,7 @@ internal class Program
     {
         fm.WriteTodo(todos);
         fm.WritePerson(personList);
+        fm.WriteUserFile(todos);
     }
 
     private static void LoadFiles()

@@ -33,7 +33,7 @@
         // String para visualização do usuário
         public override string ToString()
         {
-            return $"{Description} | {Category} | {DueDate} | {Status.ToString()} | {Owner.Name}";
+            return $"{Description.PadRight(30)} | {Category.PadRight(10)} | {DueDate} | {Status.ToString().PadRight(7)} | {Owner.Name}";
         }
 
         // String para armazenar no backup

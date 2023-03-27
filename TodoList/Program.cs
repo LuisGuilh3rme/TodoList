@@ -277,8 +277,13 @@ internal class Program
 
     static bool DeleteTask()
     {
-        Console.WriteLine("O que deseja deletar?");
-        PrintList();
+        Console.WriteLine();
+        if (!PrintList())
+        {
+            PrintError("Lista vazia!");
+            return false;
+        }
+
         Console.WriteLine("Escolha um item da lista para remoção: ");
         int.TryParse(Console.ReadLine(), out int index);
 

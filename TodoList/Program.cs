@@ -45,11 +45,32 @@ internal class Program
                 break;
             case 2:
                 // chamar metodo para visualizar tarefas
-                if (!PrintList())
+                int option;
+                do
                 {
-                    PrintError("Lista vazia!");
-                    break;
+                    Console.Clear();
+                    Console.WriteLine("1 - Visualizar todas as tarefas");
+                    Console.WriteLine("2 - Visualizar por categorias");
+                    Console.WriteLine("\n\nEscolha uma opção: ");
+                    option = int.Parse(Console.ReadLine());
+                } while ((option != 1) && (option != 2));
+                if(option == 1)
+                {
+                    if (!PrintList())
+                    {
+                        PrintError("Lista vazia!");
+                        break;
+                    }
                 }
+                else
+                {
+                    if (!PrintCategoryList())
+                    {
+                        PrintError("Lista vazia!");
+                        break;
+                    }
+                }
+
                 Console.ReadLine();
                 break;
             case 3:
@@ -177,6 +198,26 @@ internal class Program
         Console.WriteLine();
 
         return true;
+    }
+
+    static bool PrintCategoryList()
+    {
+        List<string> categories = new List<string>();
+        if (todos.Count == 0) return false;
+        foreach(Todo todo in todos)
+        {
+            
+            if (categories.Exists(category => todo.Category != category))
+            {
+                categories.Add(todo.Category);
+            }
+
+        }
+        foreach(string category in categories)
+        {
+
+        }
+
     }
 
     private static void WriteFiles()

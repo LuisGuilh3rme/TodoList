@@ -142,8 +142,9 @@ internal class Program
             Console.WriteLine("2 - Editar descrição");
             Console.WriteLine("3 - Editar categoria");
             Console.WriteLine("4 - Editar data final");
+            Console.WriteLine("5 - Editar Status");
             int.TryParse(Console.ReadLine(), out editOption);
-            if (editOption > 4 || editOption < 1) editOption = 0;
+            if (editOption > 5 || editOption < 1) editOption = 0;
 
         } while (editOption == 0);
 
@@ -177,6 +178,9 @@ internal class Program
                 Console.WriteLine("Insira a data de finalização (mm/dd/yyyy): ");
                 string date = Console.ReadLine();
                 todos[index].setDueDate(date);
+                break;
+            case 5:
+                todos[index].setStatus();
                 break;
         }
 

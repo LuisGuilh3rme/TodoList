@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualBasic;
+
 namespace TodoList.Lists
 {
     internal class Todo
@@ -20,6 +22,8 @@ namespace TodoList.Lists
             // Data de criação atual da tarefa
             Created = DateTime.Now;
 
+            DueDate = Created;
+
             // Status da tarefa começa como ativo
             Status = true;
 
@@ -33,13 +37,13 @@ namespace TodoList.Lists
         // String para visualização do usuário
         public override string ToString()
         {
-            return base.ToString();
+            return $"{Description} | {Category} | {DueDate} | {Status} | {Owner}";
         }
 
         // String para armazenar no backup
         public string ToFile()
         {
-            return "";
+            return $"{_id}|{Description}|{Category}|{Created}|{DueDate}|{Status}|{Owner}";
         }
 
         public void setDueDate(string date)

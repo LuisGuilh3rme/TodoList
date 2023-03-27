@@ -11,8 +11,9 @@ internal class Program
     }
     static void Menu()
     {
-        int escolha = -1; // aguarda a entrada do usuario para definir o valor, se continuar -1 é porque o usuario errou
-        while (escolha != 0)
+        int escolha;
+        
+        do
         {
             Console.Clear();
             Console.WriteLine("== TO DO LIST MENU ==");
@@ -20,19 +21,19 @@ internal class Program
             Console.WriteLine("2 - Visualizar tarefas");
             Console.WriteLine("3 - Editar tarefas");
             Console.WriteLine("0 - Sair");
+
             Console.Write("\nDigite a opção desejada: ");
             bool valid = int.TryParse(Console.ReadLine(), out escolha);
-            if (!valid)
-            {
-                Console.WriteLine("Opção inválida! Tente novamente.");
-                Console.WriteLine("Digite ENTER para continuar");
-                Console.ReadLine();
-            }
-            else valid = Choice(escolha);
-        }
+
+            if (!valid) escolha = -1;
+            
+            Choice(escolha);
+
+        } while (escolha != 0);
     }
     static bool Choice(int opt)
     {
+        Console.Clear();
         switch (opt)
         {
             case 1:
@@ -40,7 +41,11 @@ internal class Program
                 break;
             case 2:
                 // chamar metodo para visualizar tarefas
-                PrintList();
+                if (!PrintList())
+                {
+                    PrintError("Lista vazia!");
+                    break;
+                }
                 Console.ReadLine();
                 break;
             case 3:
@@ -51,9 +56,7 @@ internal class Program
                 Console.WriteLine("Saindo do programa...");
                 break;
             default:
-                Console.WriteLine("Opção inválida! Tente novamente.");
-                Console.WriteLine("Digite ENTER para continuar");
-                Console.ReadLine();
+                PrintError("Opção inválida! Tente novamente");
                 return false;
         }
         return true;
@@ -65,6 +68,7 @@ internal class Program
         string description = Console.ReadLine();
         Console.Write("Dono da tarefa: ");
         string ownerName = Console.ReadLine();
+
         Person person;
         if (personList.Exists(person => person.Name == ownerName))
         {
@@ -75,6 +79,7 @@ internal class Program
             person = new Person(ownerName);
             personList.Add(person);
         }
+
         todos.Add(new Todo(description, person));
         return true;
     }
@@ -82,18 +87,25 @@ internal class Program
     {
         Console.Clear();
         Console.WriteLine("== EDIT LIST ==");
-        PrintList();
-        Console.WriteLine("Escolha um item da lista para edição: ");
-        int.TryParse(Console.ReadLine(), out int index);
-        if (todos.Count < index || index < 1)
+
+        if (!PrintList())
         {
-            Console.WriteLine("Index inválido");
-            Console.WriteLine("Digite ENTER para continuar");
-            Console.ReadLine();
+            PrintError("Lista vazia!");
             return false;
         }
+
+        Console.WriteLine("Escolha um item da lista para edição: ");
+        int.TryParse(Console.ReadLine(), out int index);
+
+        if (todos.Count < index || index < 1)
+        {
+            PrintError("Index inválido");
+            return false;
+        }
+
         index = index - 1;
         int editOption = 0;
+
         do
         {
             Console.Clear();
@@ -105,7 +117,9 @@ internal class Program
             Console.WriteLine("4 - Editar data final");
             int.TryParse(Console.ReadLine(), out editOption);
             if (editOption > 4 || editOption < 1) editOption = 0;
+
         } while (editOption == 0);
+
         switch (editOption)
         {
             case 1:
@@ -127,15 +141,29 @@ internal class Program
                 todos[index].setDueDate(date);
                 break;
         }
+
+        Console.WriteLine("Sucesso na edição! Digite ENTER para continuar");
         Console.ReadLine();
         return true;
     }
-    private static void PrintList()
+    private static bool PrintList()
     {
+        if (todos.Count == 0) return false;
+
+        Console.WriteLine("LISTA DE TAREFAS");
         int count = 0;
         foreach (Todo todo in todos)
         {
-            Console.WriteLine($"{++count}) " + todo.ToString());
+            Console.WriteLine("{0:D4}) {1} ", ++count, todo.ToString());
         }
+        Console.WriteLine();
+        return true;
+    }
+
+    private static void PrintError(string message)
+    {
+        Console.WriteLine(message);
+        Console.WriteLine("Digite ENTER para continuar");
+        Console.ReadLine();
     }
 }

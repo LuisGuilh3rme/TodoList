@@ -139,50 +139,61 @@ internal class Program
             Console.WriteLine("3 - Editar categoria");
             Console.WriteLine("4 - Editar data final");
             Console.WriteLine("5 - Editar Status");
+            Console.WriteLine("0 - Sair do menu");
+
             int.TryParse(Console.ReadLine(), out editOption);
             if (editOption > 5 || editOption < 1) editOption = 0;
 
+            switch (editOption)
+            {
+                case 1:
+                    Console.WriteLine("Insira o novo nome: ");
+                    string name = Console.ReadLine();
+
+                    Person person;
+                    person = personList.Find(p => p.Name == name);
+                    if (person == null)
+                    {
+                        person = new Person(name);
+                        personList.Add(person);
+                    }
+
+                    todos[index].setPerson(person);
+                    break;
+                case 2:
+                    Console.WriteLine("Insira a nova descrição: ");
+                    string description = Console.ReadLine();
+                    todos[index].setDescription(description);
+                    break;
+                case 3:
+                    Console.WriteLine("Insira a nova categoria: ");
+                    string category = Console.ReadLine();
+                    todos[index].setCategory(category);
+                    break;
+                case 4:
+                    Console.WriteLine("Insira a data de finalização (dd/mm/yyyy): ");
+                    if (!DateOnly.TryParse(Console.ReadLine(), out DateOnly date))
+                    {
+                        Console.WriteLine("Data inválida");
+                        break;
+                    }
+
+                    Console.WriteLine("Insira o horário de finalização (horas:minutos)");
+                    if (!TimeOnly.TryParse(Console.ReadLine(), out TimeOnly time))
+                    {
+                        Console.WriteLine("Data inválida");
+                        break;
+                    }
+
+                    DateTime dateTime = DateTime.Parse(date.ToString() + " " + time.ToString());
+                    todos[index].setDueDate(dateTime);
+
+                    break;
+                case 5:
+                    todos[index].setStatus();
+                    break;
+            }
         } while (editOption == 0);
-
-        switch (editOption)
-        {
-            case 1:
-                Console.WriteLine("Insira o novo nome: ");
-                string name = Console.ReadLine();
-
-                Person person;
-                person = personList.Find(p => p.Name == name);
-                if (person == null)
-                {
-                    person = new Person(name);
-                    personList.Add(person);
-                }
-
-                todos[index].setPerson(person);
-                break;
-            case 2:
-                Console.WriteLine("Insira a nova descrição: ");
-                string description = Console.ReadLine();
-                todos[index].setDescription(description);
-                break;
-            case 3:
-                Console.WriteLine("Insira a nova categoria: ");
-                string category = Console.ReadLine();
-                todos[index].setCategory(category);
-                break;
-            case 4:
-                Console.WriteLine("Insira a data de finalização (dd/mm/yyyy): ");
-                if (!DateTime.TryParse(Console.ReadLine(), out DateTime date))
-                {
-                    PrintError("Data inválida, insira no formato correto");
-                    return false;
-                }
-                todos[index].setDueDate(date);
-                break;
-            case 5:
-                todos[index].setStatus();
-                break;
-        }
 
         Console.WriteLine("Sucesso na edição! Digite ENTER para continuar");
         Console.ReadLine();
@@ -192,7 +203,7 @@ internal class Program
     {
         if (todos.Count == 0) return false;
 
-        Console.WriteLine("      DESCRIÇÃO TAREFA".PadRight(37)  + "| CATEGORIA ".PadRight(18) + "| DATA DE FINALIZAÇÃO " + "| STATUS  ".PadRight(9) + "| DONO DA TAREFA");
+        Console.WriteLine("      DESCRIÇÃO TAREFA".PadRight(37) + "| CATEGORIA ".PadRight(18) + "| DATA DE FINALIZAÇÃO " + "| STATUS  ".PadRight(9) + "| DONO DA TAREFA");
         int count = 0;
 
         ConsoleColor aux = Console.ForegroundColor;

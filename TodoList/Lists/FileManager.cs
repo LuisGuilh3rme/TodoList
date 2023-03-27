@@ -64,7 +64,7 @@
                 string description = line[1];
                 string category = line[2];
                 string created = line[3];
-                string duedate = line[4];
+                string duedateString = line[4];
                 string status = line[5];
                 string owner = line[6];
 
@@ -75,7 +75,10 @@
 
                 Todo todo = new Todo(description, person, created);
                 todo.loadId(id);
-                todo.setDueDate(DateTime.Parse(duedate));
+
+                if (DateTime.TryParse(duedateString, out DateTime duedate))
+                    todo.setDueDate(duedate);
+
                 todo.setCategory(category);
                 if (status == "False") todo.setStatus();
                 todos.Add(todo);
@@ -83,23 +86,6 @@
 
             _sr.Close();
             return todos;
-        }
-
-        public List<string> LoadCategoryFile()
-        {
-            _backupPath = "Categories.backup";
-            if (!FileExists()) return null;
-
-            _sr = new StreamReader(_backupPath);
-            List<string> categories = new List<string>();
-
-            while (!_sr.EndOfStream)
-            {
-                categories.Add(_sr.ReadLine());
-            }
-
-            _sr.Close();
-            return categories;
         }
 
         public List<Person> LoadPersonFile()

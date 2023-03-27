@@ -5,7 +5,7 @@
         private string _id;
         public string Description { get; private set; }
         public DateTime Created { get; private set; }
-        public DateTime DueDate { get; private set; }
+        public DateTime? DueDate { get; private set; }
         public bool Status { get; private set; }
         public string MostrarStatus { get; private set; }
         public string Category { get; private set; }
@@ -19,7 +19,7 @@
             if (created != null) Created = DateTime.Parse(created);
             else Created = DateTime.Now;
 
-            DueDate = Created;
+            DueDate = null;
 
             // Status da tarefa começa como ativo
             Status = true;
@@ -35,7 +35,7 @@
         // String para visualização do usuário
         public override string ToString()
         {
-            return $"{Description.PadRight(30)} | {Category.PadRight(15)} | {DueDate} | {MostrarStatus.PadRight(7)} | {Owner.Name}";
+            return $"{Description.PadRight(30)} | {Category.PadRight(15)} | {(DueDate == null ? "SEM DATA".PadRight(19) : DueDate)} | {MostrarStatus.PadRight(7)} | {Owner.Name}";
         }
 
         // String para armazenar no backup

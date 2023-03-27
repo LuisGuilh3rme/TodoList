@@ -207,7 +207,7 @@ internal class Program
         foreach(Todo todo in todos)
         {
             
-            if (categories.Exists(category => todo.Category != category))
+            if (!categories.Exists(category => todo.Category == category))
             {
                 categories.Add(todo.Category);
             }
@@ -215,8 +215,17 @@ internal class Program
         }
         foreach(string category in categories)
         {
-
+            Console.WriteLine("Categoria: " + category);
+            List<Todo> todoFilter = todos.FindAll(todo => todo.Category == category);
+            int count = 0;
+            foreach (Todo todo in todoFilter)
+            {
+                Console.WriteLine("{0:D4}) {1} ", ++count, todo.ToString());
+            }
+            Console.WriteLine();
         }
+        Console.ReadLine();
+        return true;
 
     }
 

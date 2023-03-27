@@ -2,17 +2,20 @@
 using TodoList.Lists;
 internal class Program
 {
-    public static List<Person> personList = new List<Person>();
-    public static List<string> categories = new List<string>();
-    public static List<Todo> todos = new List<Todo>();
+    public static List<Person> personList { get; private set; }
+    public static List<Todo> todos { get; private set; }
+    public static FileManager fm = new();
     private static void Main(string[] args)
     {
+        // Carregamento de arquivos
+        LoadFiles();
+
         Menu();
     }
     static void Menu()
     {
         int escolha;
-        
+
         do
         {
             Console.Clear();
@@ -26,7 +29,7 @@ internal class Program
             bool valid = int.TryParse(Console.ReadLine(), out escolha);
 
             if (!valid) escolha = -1;
-            
+
             Choice(escolha);
 
         } while (escolha != 0);
@@ -54,6 +57,7 @@ internal class Program
                 break;
             case 0:
                 Console.WriteLine("Saindo do programa...");
+                WriteFiles();
                 break;
             default:
                 PrintError("Opção inválida! Tente novamente");
@@ -70,11 +74,8 @@ internal class Program
         string ownerName = Console.ReadLine();
 
         Person person;
-        if (personList.Exists(person => person.Name == ownerName))
-        {
-            person = personList.Find(person => person.Name == ownerName);
-        }
-        else
+        person = personList.Find(person => person.Name == ownerName);
+        if (person == null)
         {
             person = new Person(ownerName);
             personList.Add(person);
@@ -110,6 +111,7 @@ internal class Program
         {
             Console.Clear();
             Console.WriteLine(todos[index].ToString());
+            Console.WriteLine();
             Console.WriteLine("O que deseja editar?");
             Console.WriteLine("1 - Editar pessoa");
             Console.WriteLine("2 - Editar descrição");
@@ -123,7 +125,18 @@ internal class Program
         switch (editOption)
         {
             case 1:
-                todos[index].setPerson(new Person("JUBILEU"));
+                Console.WriteLine("Insira o novo nome: ");
+                string name = Console.ReadLine();
+
+                Person person;
+                person = personList.Find(p => p.Name == name);
+                if (person == null)
+                {
+                    person = new Person(name);
+                    personList.Add(person);
+                }
+
+                todos[index].setPerson(person);
                 break;
             case 2:
                 Console.WriteLine("Insira a nova descrição: ");
@@ -151,13 +164,30 @@ internal class Program
         if (todos.Count == 0) return false;
 
         Console.WriteLine("LISTA DE TAREFAS");
+
         int count = 0;
         foreach (Todo todo in todos)
         {
             Console.WriteLine("{0:D4}) {1} ", ++count, todo.ToString());
         }
         Console.WriteLine();
+
         return true;
+    }
+
+    private static void WriteFiles()
+    {
+        fm.WriteTodo(todos);
+        fm.WritePerson(personList);
+    }
+
+    private static void LoadFiles()
+    {
+        personList = fm.LoadPersonFile();
+        todos = fm.LoadTodoFile(personList);
+
+        if (personList == null) personList = new List<Person>();
+        if (todos == null) todos = new List<Todo>();
     }
 
     private static void PrintError(string message)

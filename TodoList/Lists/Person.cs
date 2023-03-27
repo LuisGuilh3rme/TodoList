@@ -26,7 +26,14 @@ namespace TodoList.Lists
 
         public override string ToString()
         {
-            return Name;
+            return $"{_id}|{Name}";
         }
+
+        public string getId()
+        {
+            return _id;
+        }
+
+        public void loadId(string id) { _id = id; }
     }
 }

@@ -7,32 +7,36 @@
         private StreamWriter _sw;
         private StreamReader _sr;
 
-        public FileManager(string fileName)
-        {
-            _backupPath = fileName + ".backup";
-        }
-
         // Armazena as tarefas
         public void WriteTodo(List<Todo> TodoList)
         {
+            _backupPath = "Tasks.backup";
+            _sw = new StreamWriter(_backupPath);
+            _sw.Close();
+
             foreach (Todo task in TodoList)
             {
                 WriteItem(task.ToFile());
             }
         }
 
-        // Armazena as categorias
-        public void WriteCategory(List<string> categories)
+        // Armazena as pessoas
+        public void WritePerson(List<Person> persons)
         {
-            foreach (string category in categories)
+            _backupPath = "Persons.backup";
+            _sw = new StreamWriter(_backupPath);
+            _sw.Close();
+
+            foreach (Person person in persons)
             {
-                WriteItem(category);
+                WriteItem(person.ToString());
             }
         }
 
+        // Escreve item por item
         public void WriteItem(string item)
         {
-            _sw = new StreamWriter(_backupPath);
+            _sw = File.AppendText(_backupPath);
 
             try
             {
@@ -45,14 +49,82 @@
             _sw.Close();
         }
 
-        public List<Todo> LoadTodoFile()
+        public List<Todo> LoadTodoFile(List<Person> persons)
         {
-            return null;
+            _backupPath = "Tasks.backup";
+            if (!FileExists()) return null;
+
+            List<Todo> todos = new List<Todo>();
+            _sr = new StreamReader(_backupPath);
+
+            while (!_sr.EndOfStream)
+            {
+                string[] line = _sr.ReadLine().Split('|');
+                string id = line[0];
+                string description = line[1];
+                string category = line[2];
+                string created = line[3];
+                string duedate = line[4];
+                string status = line[5];
+                string owner = line[6];
+
+                Person person;
+
+                person = persons.Find(p => p.getId() == owner);
+                if (person == null) person = new Person(owner);
+
+                Todo todo = new Todo(description, person, created);
+                todo.loadId(id);
+                todo.setDueDate(duedate);
+                todo.setCategory(category);
+                if (status == "false") todo.setStatus();
+                todos.Add(todo);
+            }
+
+            _sr.Close();
+            return todos;
         }
 
         public List<string> LoadCategoryFile()
         {
-            return null;
+            _backupPath = "Categories.backup";
+            if (!FileExists()) return null;
+
+            _sr = new StreamReader(_backupPath);
+            List<string> categories = new List<string>();
+
+            while (!_sr.EndOfStream)
+            {
+                categories.Add(_sr.ReadLine());
+            }
+
+            _sr.Close();
+            return categories;
+        }
+
+        public List<Person> LoadPersonFile()
+        {
+            _backupPath = "Persons.backup";
+            if (!FileExists()) return null;
+
+            _sr = new StreamReader(_backupPath);
+            List<Person> persons = new List<Person>();
+
+            while (!_sr.EndOfStream)
+            {
+                string[] line = _sr.ReadLine().Split('|');
+
+                string id = line[0];
+                string name = line[1];
+
+                Person person = new Person(name);
+                person.loadId(id);
+
+                persons.Add(person);
+            }
+
+            _sr.Close();
+            return persons;
         }
 
         public bool FileExists()

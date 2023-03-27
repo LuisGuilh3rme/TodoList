@@ -175,8 +175,12 @@ internal class Program
                 todos[index].setCategory(category);
                 break;
             case 4:
-                Console.WriteLine("Insira a data de finalização (mm/dd/yyyy): ");
-                string date = Console.ReadLine();
+                Console.WriteLine("Insira a data de finalização (dd/mm/yyyy): ");
+                if (!DateTime.TryParse(Console.ReadLine(), out DateTime date))
+                {
+                    PrintError("Data inválida, insira no formato correto");
+                    return false;
+                }
                 todos[index].setDueDate(date);
                 break;
             case 5:
@@ -192,8 +196,7 @@ internal class Program
     {
         if (todos.Count == 0) return false;
 
-        Console.WriteLine("LISTA DE TAREFAS");
-
+        Console.WriteLine("      DESCRIÇÃO TAREFA | CATEGORIA | DATA DE FINALIZAÇÃO | STATUS ATUAL | DONO DA TAREFA");
         int count = 0;
         foreach (Todo todo in todos)
         {

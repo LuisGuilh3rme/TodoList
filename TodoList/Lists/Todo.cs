@@ -33,7 +33,7 @@
         // String para visualização do usuário
         public override string ToString()
         {
-            return $"{Description.PadRight(30)} | {Category.PadRight(10)} | {DueDate} | {Status.ToString().PadRight(7)} | {Owner.Name}";
+            return $"{Description.PadRight(30)} | {Category.PadRight(15)} | {DueDate} | {Status.ToString().PadRight(7)} | {Owner.Name}";
         }
 
         // String para armazenar no backup
@@ -42,7 +42,7 @@
             return $"{_id}|{Description}|{Category}|{Created}|{DueDate}|{Status}|{Owner.getId()}";
         }
 
-        public void setDueDate(string date) { DueDate = DateTime.Parse(date); }
+        public void setDueDate(DateTime date) { DueDate = date; }
 
         public void setDescription(string description) { Description = description; }
 

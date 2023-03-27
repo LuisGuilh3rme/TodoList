@@ -75,7 +75,7 @@
 
                 Todo todo = new Todo(description, person, created);
                 todo.loadId(id);
-                todo.setDueDate(duedate);
+                todo.setDueDate(DateTime.Parse(duedate));
                 todo.setCategory(category);
                 if (status == "false") todo.setStatus();
                 todos.Add(todo);
